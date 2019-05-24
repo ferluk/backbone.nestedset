@@ -35,6 +35,16 @@ var NestedSetCollection = Backbone.Collection.extend({
         return Backbone.Collection.prototype._prepareModel.apply(this, arguments);
     },
     
+    getParent: function (searchModel, levels) {
+        var models = this.filter(function (model) {
+            if(levels) {
+                if(model.get('level') < searchModel.get('level') - levels) { return }
+            }
+            return model.get('right') > searchModel.get('right') && model.get('left') < searchModel.get('left');
+        });
+        return models;
+    },
+    
     getChildren: function (searchModel, levels) {
         var models = this.filter(function (model) {
             if(levels) {
